@@ -1,7 +1,7 @@
 import genDiff from '../src';
 
-const after = '/home/ivan/after.json';
-const before = '/home/ivan/before.json';
+const after = `${__dirname}/after.json`;
+const before = `${__dirname}/before.json`;
 const diffBtoA = [
   '{',
   '  host: hexlet.io',
@@ -23,10 +23,7 @@ const diffAtoB = [
   '}',
 ].join('\n');
 
-// eslint-disable-next-line no-undef
 test('gendiff', () => {
-  // eslint-disable-next-line no-undef
   expect(genDiff(after, before)).toEqual(diffBtoA);
-  // eslint-disable-next-line no-undef
   expect(genDiff(before, after)).toEqual(diffAtoB);
 });
