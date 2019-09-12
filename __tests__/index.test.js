@@ -1,7 +1,7 @@
 import genDiff from '../src';
 
-const after = `${__dirname}/after.json`;
-const before = `${__dirname}/before.json`;
+const after = `${__dirname}/__fixtures__/after.json`;
+const before = `${__dirname}/__fixtures__/before.json`;
 const diffBtoA = [
   '{',
   '  host: hexlet.io',
