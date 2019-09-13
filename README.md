@@ -13,3 +13,5 @@ $ npm install gendiff-front-project2
 ## gendiff <file1> <file2>
 
 [![asciicast](https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw.svg)](https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw)
+
+<a href="https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw" target="_blank"><img src="https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw.svg" /></a>
