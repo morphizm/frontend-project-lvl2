@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import fs from 'fs';
+import parse from './parsers';
 
 const genDiff = (pathToFile1, pathToFile2) => {
-  const oldFile = JSON.parse(fs.readFileSync(pathToFile1));
-  const newFile = JSON.parse(fs.readFileSync(pathToFile2));
+  const oldFile = parse(pathToFile1);
+  const newFile = parse(pathToFile2);
   const oldKeys = Object.keys(oldFile);
   const newKeys = Object.keys(newFile);
 

@@ -12,7 +12,8 @@ $ npm install gendiff-front-project2
 
 ## gendiff <file1> <file2>
 
+# JSON
 [![asciicast](https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw.svg)](https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw)
 
-<a href="https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw" target="_blank"><img src="https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw.svg" /></a>
-<script id="asciicast-u3Y0DiVW9LmbDTAyvmOSE7UBw" src="https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw.js" async></script>
+# YAML
+[![asciicast](https://asciinema.org/a/Jj5yqWvI9nsp7YvoNrXvT06FH.svg)](https://asciinema.org/a/Jj5yqWvI9nsp7YvoNrXvT06FH)

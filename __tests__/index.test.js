@@ -1,7 +1,10 @@
 import genDiff from '../src';
 
-const after = `${__dirname}/__fixtures__/after.json`;
-const before = `${__dirname}/__fixtures__/before.json`;
+const afterJson = `${__dirname}/__fixtures__/after.json`;
+const beforeJson = `${__dirname}/__fixtures__/before.json`;
+const afterYaml = `${__dirname}/__fixtures__/after.yml`;
+const beforeYaml = `${__dirname}/__fixtures__/before.yml`;
+
 const diffBtoA = [
   '{',
   '  host: hexlet.io',
@@ -23,7 +26,11 @@ const diffAtoB = [
   '}',
 ].join('\n');
 
-test('gendiff', () => {
-  expect(genDiff(after, before)).toEqual(diffBtoA);
-  expect(genDiff(before, after)).toEqual(diffAtoB);
+test('json', () => {
+  expect(genDiff(afterJson, beforeJson)).toEqual(diffBtoA);
+  expect(genDiff(beforeJson, afterJson)).toEqual(diffAtoB);
+});
+test('yaml', () => {
+  expect(genDiff(afterYaml, beforeYaml)).toEqual(diffBtoA);
+  expect(genDiff(beforeYaml, afterYaml)).toEqual(diffAtoB);
 });
