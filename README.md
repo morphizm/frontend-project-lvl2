@@ -17,3 +17,6 @@ $ npm install gendiff-front-project2
 
 # YAML
 [![asciicast](https://asciinema.org/a/Jj5yqWvI9nsp7YvoNrXvT06FH.svg)](https://asciinema.org/a/Jj5yqWvI9nsp7YvoNrXvT06FH)
+
+# INI
+[![asciicast](https://asciinema.org/a/6uaxkSLmrxUUGOHwPnecUmnYZ.svg)](https://asciinema.org/a/6uaxkSLmrxUUGOHwPnecUmnYZ)

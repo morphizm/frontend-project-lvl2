@@ -4,6 +4,8 @@ const afterJson = `${__dirname}/__fixtures__/after.json`;
 const beforeJson = `${__dirname}/__fixtures__/before.json`;
 const afterYaml = `${__dirname}/__fixtures__/after.yml`;
 const beforeYaml = `${__dirname}/__fixtures__/before.yml`;
+const afterIni = `${__dirname}/__fixtures__/after.ini`;
+const beforeIni = `${__dirname}/__fixtures__/before.ini`;
 
 const diffBtoA = [
   '{',
@@ -34,3 +36,16 @@ test('yaml', () => {
   expect(genDiff(afterYaml, beforeYaml)).toEqual(diffBtoA);
   expect(genDiff(beforeYaml, afterYaml)).toEqual(diffAtoB);
 });
+test('ini', () => {
+  expect(genDiff(afterIni, beforeIni)).toEqual(diffBtoA);
+  expect(genDiff(beforeIni, afterIni)).toEqual(diffAtoB);
+});
+
+test.each([[afterJson, beforeJson, diffBtoA],
+  [afterIni, beforeIni, diffBtoA],
+  [afterYaml, beforeYaml, diffBtoA]])(
+  'J I Y',
+  (a, b, exp) => {
+    expect(genDiff(a, b)).toEqual(exp);
+  },
+);
