@@ -6,46 +6,87 @@ const afterYaml = `${__dirname}/__fixtures__/after.yml`;
 const beforeYaml = `${__dirname}/__fixtures__/before.yml`;
 const afterIni = `${__dirname}/__fixtures__/after.ini`;
 const beforeIni = `${__dirname}/__fixtures__/before.ini`;
+const bigAfterJson = `${__dirname}/__fixtures__/bigAfter.json`;
+const bigBeforeJson = `${__dirname}/__fixtures__/bigBefore.json`;
+const bigAfterYAML = `${__dirname}/__fixtures__/BigAfterYAML.yml`;
+const bigBeforeYAML = `${__dirname}/__fixtures__/BigBeforeYAML.yml`;
+const bigBeforeINI = `${__dirname}/__fixtures__/BigBeforeIni.ini`;
+const bigAfterINI = `${__dirname}/__fixtures__/BigAfterIni.ini`;
 
+const diffBigBtoA = [
+  '{',
+  '    common: {',
+  '        setting1: Value 1',
+  '      + setting3: {',
+  '            key: value',
+  '        }',
+  '      - setting3: true',
+  '        setting6: {',
+  '            key: value',
+  '          + ops: vops',
+  '        }',
+  '      + follow: false',
+  '      + setting4: blah blah',
+  '      + setting5: {',
+  '            key5: value5',
+  '        }',
+  '      - setting2: 200',
+  '    }',
+  '    group1: {',
+  '        foo: bar',
+  '      + baz: bars',
+  '      - baz: bas',
+  '      + nest: str',
+  '      - nest: {',
+  '            key: value',
+  '        }',
+  '    }',
+  '  + group3: {',
+  '        fee: 100500',
+  '    }',
+  '  - group2: {',
+  '        abc: 12345',
+  '    }',
+  '}',
+].join('\n');
 const diffBtoA = [
   '{',
-  '  host: hexlet.io',
-  '+ timeout: 20',
-  '- timeout: 50',
-  '+ verbose: true',
-  '- proxy: 123.234.53.22',
-  '- follow: false',
+  '  + timeout: 20',
+  '  - timeout: 50',
+  '    host: hexlet.io',
+  '  + verbose: true',
+  '  - proxy: 123.234.53.22',
+  '  - follow: false',
   '}',
 ].join('\n');
 const diffAtoB = [
   '{',
-  '  host: hexlet.io',
-  '+ timeout: 50',
-  '- timeout: 20',
-  '+ proxy: 123.234.53.22',
-  '+ follow: false',
-  '- verbose: true',
+  '    host: hexlet.io',
+  '  + timeout: 50',
+  '  - timeout: 20',
+  '  + proxy: 123.234.53.22',
+  '  + follow: false',
+  '  - verbose: true',
   '}',
 ].join('\n');
 
-test('json', () => {
-  expect(genDiff(afterJson, beforeJson)).toEqual(diffBtoA);
-  expect(genDiff(beforeJson, afterJson)).toEqual(diffAtoB);
-});
-test('yaml', () => {
-  expect(genDiff(afterYaml, beforeYaml)).toEqual(diffBtoA);
-  expect(genDiff(beforeYaml, afterYaml)).toEqual(diffAtoB);
-});
-test('ini', () => {
-  expect(genDiff(afterIni, beforeIni)).toEqual(diffBtoA);
-  expect(genDiff(beforeIni, afterIni)).toEqual(diffAtoB);
-});
-
-test.each([[afterJson, beforeJson, diffBtoA],
-  [afterIni, beforeIni, diffBtoA],
-  [afterYaml, beforeYaml, diffBtoA]])(
-  'J I Y',
-  (a, b, exp) => {
-    expect(genDiff(a, b)).toEqual(exp);
+test.each([[afterJson, beforeJson],
+  [afterIni, beforeIni],
+  [afterYaml, beforeYaml]])(
+  'JSON 0, INI 1, YAML 2 current %#',
+  (a, b) => {
+    expect(genDiff(a, b)).toEqual(diffBtoA);
+    expect(genDiff(b, a)).toEqual(diffAtoB);
   },
 );
+// */
+test('jsonFull', () => {
+  expect(genDiff(bigAfterJson, bigBeforeJson)).toEqual(diffBigBtoA);
+});
+
+test('YAMLFull', () => {
+  expect(genDiff(bigAfterYAML, bigBeforeYAML)).toEqual(diffBigBtoA);
+});
+test('iniFull', () => {
+  expect(genDiff(bigAfterINI, bigBeforeINI)).toEqual(diffBigBtoA);
+});
