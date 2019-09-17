@@ -20,3 +20,6 @@ $ npm install gendiff-front-project2
 
 # INI
 [![asciicast](https://asciinema.org/a/6uaxkSLmrxUUGOHwPnecUmnYZ.svg)](https://asciinema.org/a/6uaxkSLmrxUUGOHwPnecUmnYZ)
+
+# Nested Files
+[![asciicast](https://asciinema.org/a/lKfCT32jPmeW2213HQq9uxvkN.svg)](https://asciinema.org/a/lKfCT32jPmeW2213HQq9uxvkN)
