@@ -10,16 +10,16 @@
 $ npm install gendiff-front-project2
 ```
 
-## gendiff <file1> <file2>
+## gendiff \<file1\> \<file2\>
 
-# JSON
+### JSON
 [![asciicast](https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw.svg)](https://asciinema.org/a/u3Y0DiVW9LmbDTAyvmOSE7UBw)
 
-# YAML
+### YAML
 [![asciicast](https://asciinema.org/a/Jj5yqWvI9nsp7YvoNrXvT06FH.svg)](https://asciinema.org/a/Jj5yqWvI9nsp7YvoNrXvT06FH)
 
-# INI
+### INI
 [![asciicast](https://asciinema.org/a/6uaxkSLmrxUUGOHwPnecUmnYZ.svg)](https://asciinema.org/a/6uaxkSLmrxUUGOHwPnecUmnYZ)
 
-# Nested Files
+### Nested Files
 [![asciicast](https://asciinema.org/a/lKfCT32jPmeW2213HQq9uxvkN.svg)](https://asciinema.org/a/lKfCT32jPmeW2213HQq9uxvkN)
