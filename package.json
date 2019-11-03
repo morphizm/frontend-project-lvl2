@@ -1,7 +1,7 @@
 {
   "name": "gendiff-front-project2",
   "version": "1.0.3",
-  "description": "",
+  "description": "Gendiff to compare two files, such as YML, INI, JSON",
   "main": "dist/index.js",
   "scripts": {
     "babel-node": "babel-node",

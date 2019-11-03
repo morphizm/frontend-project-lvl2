@@ -17,10 +17,10 @@ const diffBigBtoA = [
   '{',
   '    common: {',
   '        setting1: Value 1',
+  '      - setting3: true',
   '      + setting3: {',
   '            key: value',
   '        }',
-  '      - setting3: true',
   '        setting6: {',
   '            key: value',
   '          + ops: vops',
@@ -33,9 +33,9 @@ const diffBigBtoA = [
   '      - setting2: 200',
   '    }',
   '    group1: {',
-  '        foo: bar',
   '      + baz: bars',
   '      - baz: bas',
+  '        foo: bar',
   '      + nest: str',
   '      - nest: {',
   '            key: value',
@@ -51,9 +51,9 @@ const diffBigBtoA = [
 ].join('\n');
 const diffBtoA = [
   '{',
+  '    host: hexlet.io',
   '  + timeout: 20',
   '  - timeout: 50',
-  '    host: hexlet.io',
   '  + verbose: true',
   '  - proxy: 123.234.53.22',
   '  - follow: false',
@@ -61,9 +61,9 @@ const diffBtoA = [
 ].join('\n');
 const diffAtoB = [
   '{',
-  '    host: hexlet.io',
   '  + timeout: 50',
   '  - timeout: 20',
+  '    host: hexlet.io',
   '  + proxy: 123.234.53.22',
   '  + follow: false',
   '  - verbose: true',
@@ -90,3 +90,4 @@ test('YAMLFull', () => {
 test('iniFull', () => {
   expect(genDiff(bigAfterINI, bigBeforeINI)).toEqual(diffBigBtoA);
 });
+// */
