@@ -16,18 +16,17 @@ export const parse = (element, parents) => {
     const str = `Property '${parents}${key}' was added with value: ${complex}`;
     return str;
   }
-  if (action === 'updated') {
-    const { old, $new } = value;
-    if ((old && old === $new) || (!old && !$new)) {
-      return '';
-    }
-    const newOld = typeof old === 'string' ? `'${old}'` : old;
-    const newNew = typeof $new === 'string' ? `'${$new}'` : $new;
-    const oldComplex = newOld || complexValue;
-    const newComplex = newNew || complexValue;
-    const str = `Property '${parents}${key}' was updated. From ${oldComplex} to ${newComplex}`;
-    return str;
+  // if (action === 'updated') {
+  const { old, $new } = value;
+  if ((old && old === $new) || (!old && !$new)) {
+    return '';
   }
+  const newOld = typeof old === 'string' ? `'${old}'` : old;
+  const newNew = typeof $new === 'string' ? `'${$new}'` : $new;
+  const oldComplex = newOld || complexValue;
+  const newComplex = newNew || complexValue;
+  const str = `Property '${parents}${key}' was updated. From ${oldComplex} to ${newComplex}`;
+  return str;
 };
 
 export const render = (data) => {
