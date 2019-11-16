@@ -10,7 +10,7 @@ program
   .option('-f, --format [type]', 'Output format')
   .arguments('<file1> <file2>')
   .action((file1, file2) => {
-    console.log(genDiff(file1, file2));
+    console.log(genDiff(file1, file2, program.format));
     process.exit(0);
   });
 

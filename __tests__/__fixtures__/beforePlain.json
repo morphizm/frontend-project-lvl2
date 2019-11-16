@@ -1,0 +1,19 @@
+{
+  "timeout": 50,
+  "proxy": "89.0",
+  
+  "common": {
+    "setting4": "text",
+    "setting5": false,
+    "setting6": {
+    }
+  },
+
+  "group1": {
+    "baz": "bars"
+  },
+
+  "group3": {
+    "fee": "100500"
+  }
+}
