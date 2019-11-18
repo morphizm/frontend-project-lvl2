@@ -17,11 +17,5 @@ program
 program.parse(process.argv);
 
 if (program.format) {
-  console.log('json, plain');
+  console.log('json, plain, text');
 }
-/*
-if (formatValue !== 'plain' && formatValue !== 'json') {
-  console.error('no command given!');
-  process.exit(1);
-}
-*/

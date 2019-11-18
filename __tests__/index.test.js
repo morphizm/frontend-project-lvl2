@@ -7,12 +7,12 @@ const beforeYaml = `${__dirname}/__fixtures__/before.yml`;
 const afterIni = `${__dirname}/__fixtures__/after.ini`;
 const beforeIni = `${__dirname}/__fixtures__/before.ini`;
 
-const bigAfterJson = `${__dirname}/__fixtures__/bigAfter.json`;
-const bigBeforeJson = `${__dirname}/__fixtures__/bigBefore.json`;
-const bigAfterYAML = `${__dirname}/__fixtures__/BigAfterYAML.yml`;
-const bigBeforeYAML = `${__dirname}/__fixtures__/BigBeforeYAML.yml`;
-const bigBeforeINI = `${__dirname}/__fixtures__/BigBeforeIni.ini`;
-const bigAfterINI = `${__dirname}/__fixtures__/BigAfterIni.ini`;
+const nestedAfterJson = `${__dirname}/__fixtures__/nestedAfter.json`;
+const nestedBeforeJson = `${__dirname}/__fixtures__/nestedBefore.json`;
+const nestedAfterYAML = `${__dirname}/__fixtures__/nestedAfter.yml`;
+const nestedBeforeYAML = `${__dirname}/__fixtures__/nestedBefore.yml`;
+const nestedBeforeINI = `${__dirname}/__fixtures__/nestedBefore.ini`;
+const nestedAfterINI = `${__dirname}/__fixtures__/nestedAfter.ini`;
 
 const plainBefore = `${__dirname}/__fixtures__/beforePlain.json`;
 const plainAfter = `${__dirname}/__fixtures__/afterPlain.json`;
@@ -30,8 +30,6 @@ const plainFormat = [
   "Property 'verbose' was added with value: true",
   "Property 'group2' was added with value: [complex value]",
 ].join('\n');
-
-// action, last, now
 
 const json = {
   timeout: ['updated', 20, 50],
@@ -127,14 +125,14 @@ describe('FORMAT TEXT', () => {
   );
 
   test('nested json', () => {
-    expect(genDiff(bigAfterJson, bigBeforeJson)).toEqual(diffBigBtoA);
+    expect(genDiff(nestedAfterJson, nestedBeforeJson)).toEqual(diffBigBtoA);
   });
 
   test('nested yaml', () => {
-    expect(genDiff(bigAfterYAML, bigBeforeYAML)).toEqual(diffBigBtoA);
+    expect(genDiff(nestedAfterYAML, nestedBeforeYAML)).toEqual(diffBigBtoA);
   });
   test('nested ini', () => {
-    expect(genDiff(bigAfterINI, bigBeforeINI)).toEqual(diffBigBtoA);
+    expect(genDiff(nestedAfterINI, nestedBeforeINI)).toEqual(diffBigBtoA);
   });
 });
 

@@ -16,7 +16,6 @@ const parse = (element, parents) => {
     const str = `Property '${parents}${key}' was added with value: ${complex}`;
     return str;
   }
-  // if (action === 'updated') {
   const { old, $new } = value;
   if ((old && old === $new) || (!old && !$new)) {
     return '';
