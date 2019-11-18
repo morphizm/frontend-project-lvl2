@@ -31,6 +31,31 @@ const plainFormat = [
   "Property 'group2' was added with value: [complex value]",
 ].join('\n');
 
+// action, last, now
+
+const json = {
+  timeout: ['updated', 20, 50],
+  common: ['updated', {
+    setting6: ['updated', { ops: ['added', 'vops'] }],
+    setting2: ['added', 200],
+    sites: ['added', 'hexlet.io'],
+    setting4: ['removed', 'text'],
+    setting5: ['removed', false],
+  }],
+  group1: ['updated', {
+    baz: ['updated', 'bas', 'bars'],
+  }],
+  verbose: ['added', true],
+  group2: ['added', {
+    fee: '100500',
+  }],
+  proxy: ['removed', '89.0'],
+  group3: ['removed', {
+    fee: '100500',
+  }],
+};
+
+
 const diffBigBtoA = [
   '{',
   '    common: {',
@@ -88,28 +113,40 @@ const diffAtoB = [
   '}',
 ].join('\n');
 
-test.each([[afterJson, beforeJson],
-  [afterIni, beforeIni],
-  [afterYaml, beforeYaml]])(
-  'JSON 0, INI 1, YAML 2 current %#',
-  (a, b) => {
-    expect(genDiff(a, b)).toEqual(diffBtoA);
-    expect(genDiff(b, a)).toEqual(diffAtoB);
-  },
-);
-// */
-test('jsonFull', () => {
-  expect(genDiff(bigAfterJson, bigBeforeJson)).toEqual(diffBigBtoA);
+describe('FORMAT TEXT', () => {
+  test.each([[afterJson, beforeJson],
+    [afterIni, beforeIni],
+    [afterYaml, beforeYaml]])(
+    'JSON 0, INI 1, YAML 2 current %#',
+    (a, b) => {
+      expect(genDiff(a, b)).toEqual(diffBtoA);
+      expect(genDiff(b, a)).toEqual(diffAtoB);
+    },
+  );
+
+  test('nested json', () => {
+    expect(genDiff(bigAfterJson, bigBeforeJson)).toEqual(diffBigBtoA);
+  });
+
+  test('nested yaml', () => {
+    expect(genDiff(bigAfterYAML, bigBeforeYAML)).toEqual(diffBigBtoA);
+  });
+  test('nested ini', () => {
+    expect(genDiff(bigAfterINI, bigBeforeINI)).toEqual(diffBigBtoA);
+  });
 });
 
-test('YAMLFull', () => {
-  expect(genDiff(bigAfterYAML, bigBeforeYAML)).toEqual(diffBigBtoA);
+describe('FORMAT PLAIN', () => {
+  test('plain', () => {
+    expect(genDiff(plainBefore, plainAfter, 'plain')).toEqual(plainFormat);
+  });
 });
-test('iniFull', () => {
-  expect(genDiff(bigAfterINI, bigBeforeINI)).toEqual(diffBigBtoA);
-});
-// */
 
-test('Plain format', () => {
-  expect(genDiff(plainBefore, plainAfter, 'plain')).toEqual(plainFormat);
+describe('FORMAT JSON', () => {
+  test('json', () => {
+    // expect(genDiff(plainBefore, plainAfter, 'json')).toEqual((json));
+    // expect(genDiff(plainBefore, plainAfter, 'json')).toEqual(JSON.stringify(json));
+
+    expect(genDiff(plainAfter, plainBefore, 'json')).toEqual(JSON.stringify(json));
+  });
 });

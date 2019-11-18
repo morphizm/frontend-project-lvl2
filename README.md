@@ -25,4 +25,4 @@ $ npm install gendiff-front-project2
 [![asciicast](https://asciinema.org/a/lKfCT32jPmeW2213HQq9uxvkN.svg)](https://asciinema.org/a/lKfCT32jPmeW2213HQq9uxvkN)
 
 ### Plain format
-[![asciicast](https://asciinema.org/a/rdKnTGw6bnCS1dNb0UYJS9yTk.svg)](https://asciinema.org/a/rdKnTGw6bnCS1dNb0UYJS9yTk)
+[![asciicast](https://asciinema.org/a/S2GiuqLYaRGcfQmQb7yBIBu1f.svg)](https://asciinema.org/a/S2GiuqLYaRGcfQmQb7yBIBu1f)

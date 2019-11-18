@@ -1,7 +1,7 @@
-// import _ from 'lodash';
 import parse from './parsers';
 import { diff, render } from './ast';
 import { render as renderPlain } from './formatters/plain';
+import { render as renderJson } from './formatters/json';
 
 const genDiff = (pathToFile1, pathToFile2, format) => {
   const oldFile = parse(pathToFile1);
@@ -10,6 +10,10 @@ const genDiff = (pathToFile1, pathToFile2, format) => {
   if (format === 'plain') {
     const result = renderPlain(difference);
     return result;
+  }
+  if (format === 'json') {
+    const result = renderJson(difference);
+    return JSON.stringify(result);
   }
   const result = render(difference);
   return result;
