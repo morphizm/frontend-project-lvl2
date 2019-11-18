@@ -92,6 +92,7 @@ const diffBigBtoA = [
   '    }',
   '}',
 ].join('\n');
+
 const diffBtoA = [
   '{',
   '    host: hexlet.io',
@@ -102,6 +103,7 @@ const diffBtoA = [
   '  - follow: false',
   '}',
 ].join('\n');
+
 const diffAtoB = [
   '{',
   '  + timeout: 50',
@@ -144,9 +146,6 @@ describe('FORMAT PLAIN', () => {
 
 describe('FORMAT JSON', () => {
   test('json', () => {
-    // expect(genDiff(plainBefore, plainAfter, 'json')).toEqual((json));
-    // expect(genDiff(plainBefore, plainAfter, 'json')).toEqual(JSON.stringify(json));
-
     expect(genDiff(plainAfter, plainBefore, 'json')).toEqual(JSON.stringify(json));
   });
 });

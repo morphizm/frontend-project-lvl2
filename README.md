@@ -26,3 +26,6 @@ $ npm install gendiff-front-project2
 
 ### Plain format
 [![asciicast](https://asciinema.org/a/S2GiuqLYaRGcfQmQb7yBIBu1f.svg)](https://asciinema.org/a/S2GiuqLYaRGcfQmQb7yBIBu1f)
+
+### Json format
+[![asciicast](https://asciinema.org/a/1r55vOshPO3Y6Z8an5F0iCt52.svg)](https://asciinema.org/a/1r55vOshPO3Y6Z8an5F0iCt52)

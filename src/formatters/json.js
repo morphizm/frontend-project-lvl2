@@ -7,7 +7,7 @@ const parseWithKey = (elem) => {
   return children.map((e) => parseWithKey(e));
 };
 
-export const parse = (elem) => {
+const parse = (elem) => {
   const { value, children } = elem;
   if (children.length === 0) {
     const res = value.old ? value.old : value;
@@ -24,7 +24,7 @@ const updatedParse = (elem, func) => {
   return [func(children)];
 };
 
-export const render = (data) => {
+const render = (data) => {
   const iter = (obj) => obj.reduce((acc, elem) => {
     if (elem.action === 'removed') {
       const newAcc = [elem.action, parse(elem)];
@@ -40,3 +40,5 @@ export const render = (data) => {
 
   return iter(data);
 };
+
+export default render;

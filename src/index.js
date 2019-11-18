@@ -1,7 +1,9 @@
 import parse from './parsers';
-import { diff, render } from './ast';
-import { render as renderPlain } from './formatters/plain';
-import { render as renderJson } from './formatters/json';
+import diff from './ast';
+import renderPlain from './formatters/plain';
+import renderJson from './formatters/json';
+import renderText from './formatters/text';
+
 
 const genDiff = (pathToFile1, pathToFile2, format) => {
   const oldFile = parse(pathToFile1);
@@ -15,7 +17,7 @@ const genDiff = (pathToFile1, pathToFile2, format) => {
     const result = renderJson(difference);
     return JSON.stringify(result);
   }
-  const result = render(difference);
+  const result = renderText(difference);
   return result;
 };
 

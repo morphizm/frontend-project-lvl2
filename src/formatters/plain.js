@@ -1,4 +1,4 @@
-export const parse = (element, parents) => {
+const parse = (element, parents) => {
   const complexValue = '[complex value]';
   const {
     key, value, action, children,
@@ -29,7 +29,7 @@ export const parse = (element, parents) => {
   return str;
 };
 
-export const render = (data) => {
+const render = (data) => {
   const iter = (obj, depth) => {
     const result = obj.reduce((acc, element) => {
       if (element.children.length === 0) {
@@ -52,3 +52,5 @@ export const render = (data) => {
 
   return iter(data, '');
 };
+
+export default render;
