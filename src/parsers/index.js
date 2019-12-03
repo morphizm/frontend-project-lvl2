@@ -1,4 +1,3 @@
-import fs from 'fs';
 import yaml from 'js-yaml';
 import path from 'path';
 import ini from 'ini';
@@ -9,10 +8,9 @@ const formatToArray = {
   '.ini': (e) => ini.parse(e),
 };
 
-const parse = (filePath) => {
-  const extname = path.extname(filePath);
-  const readFile = fs.readFileSync(filePath, 'utf-8');
-  return formatToArray[extname](readFile);
+const parse = (readyFile, pathname) => {
+  const extname = path.extname(pathname);
+  return formatToArray[extname](readyFile);
 };
 
 export default parse;
