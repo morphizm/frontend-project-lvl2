@@ -1,6 +1,6 @@
+import fs from 'fs';
 import yaml from 'js-yaml';
 import path from 'path';
-import fs from 'fs';
 import ini from 'ini';
 
 const formatToArray = {

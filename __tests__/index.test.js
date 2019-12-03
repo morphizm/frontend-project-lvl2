@@ -13,7 +13,7 @@ const beforeIni = `${path}/before.ini`;
 const plainBefore = `${path}/beforePlain.json`;
 const plainAfter = `${path}/afterPlain.json`;
 
-describe('FORMAT TEXT', () => {
+describe('FORMATS', () => {
   const diffAtoB = fs.readFileSync(`${path}/resultAB.txt`, 'utf-8');
   const diffBtoA = fs.readFileSync(`${path}/resultBA.txt`, 'utf-8');
   const diffBigBtoA = fs.readFileSync(`${path}/resultNested.txt`, 'utf-8');
@@ -45,16 +45,12 @@ describe('FORMAT TEXT', () => {
     const nestedAfterINI = `${path}/nestedAfter.ini`;
     expect(genDiff(nestedAfterINI, nestedBeforeINI)).toEqual(diffBigBtoA);
   });
-});
 
-describe('FORMAT PLAIN', () => {
   test('plain', () => {
     const plainFormat = fs.readFileSync(`${path}/resultPlain.txt`, 'utf-8');
     expect(genDiff(plainBefore, plainAfter, 'plain')).toEqual(plainFormat);
   });
-});
 
-describe('FORMAT JSON', () => {
   test('json', () => {
     const json = fs.readFileSync(`${path}/resultJson.txt`, 'utf-8');
     expect(genDiff(plainAfter, plainBefore, 'json')).toEqual(json);

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const parse = (func, obj, key) => {
   if (obj[key] instanceof Object) {
     return {
@@ -14,9 +16,23 @@ const parse = (func, obj, key) => {
 const diff = (oldFile, newFile) => {
   const oldKeys = Object.keys(oldFile);
   const newKeys = Object.keys(newFile);
-  const deleted = newKeys.filter((key) => !oldKeys.includes(key));
-  const added = oldKeys.filter((key) => !newKeys.includes(key));
-  const updated = newKeys.filter((key) => oldKeys.includes(key));
+  const keys = _.uniq([...newKeys, ...oldKeys]);
+
+  const dividedKeys = keys.reduce((acc, key) => {
+    const [deleted, added, updated] = acc;
+    if (!oldKeys.includes(key) && newKeys.includes(key)) {
+      const newDeleted = [...deleted, key];
+      return [newDeleted, added, updated];
+    }
+    if (oldKeys.includes(key) && !newKeys.includes(key)) {
+      const newAdded = [...added, key];
+      return [deleted, newAdded, updated];
+    }
+    const newUpdated = [...updated, key];
+    return [deleted, added, newUpdated];
+  }, [[], [], []]);
+
+  const [deleted, added, updated] = dividedKeys;
 
   const deL = deleted.reduce((acc, key) => {
     const ast = {
