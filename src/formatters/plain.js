@@ -16,12 +16,12 @@ const parse = (element, parents) => {
     const str = `Property '${parents}${key}' was added with value: ${complex}`;
     return str;
   }
-  const { old, $new } = value;
-  if ((old && old === $new) || (!old && !$new)) {
+  const { oldValue, newValue } = value;
+  if ((oldValue && oldValue === newValue) || (!oldValue && !newValue)) {
     return '';
   }
-  const newOld = typeof old === 'string' ? `'${old}'` : old;
-  const newNew = typeof $new === 'string' ? `'${$new}'` : $new;
+  const newOld = typeof oldValue === 'string' ? `'${oldValue}'` : oldValue;
+  const newNew = typeof newValue === 'string' ? `'${newValue}'` : newValue;
   const oldComplex = newOld || complexValue;
   const newComplex = newNew || complexValue;
   const str = `Property '${parents}${key}' was updated. From ${oldComplex} to ${newComplex}`;

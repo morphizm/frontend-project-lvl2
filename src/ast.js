@@ -1,95 +1,90 @@
 import _ from 'lodash';
 
-const parse = (func, obj, key) => {
-  if (obj[key] instanceof Object) {
+const parse = (func, content) => {
+  if (_.isObject(content)) {
     return {
       value: undefined,
-      children: func(obj[key], obj[key]),
+      children: func(content, content),
     };
   }
   return {
-    value: obj[key],
+    value: content,
     children: [],
   };
 };
 
-const diff = (oldFile, newFile) => {
-  const oldKeys = Object.keys(oldFile);
-  const newKeys = Object.keys(newFile);
-  const keys = _.uniq([...newKeys, ...oldKeys]);
-
-  const dividedKeys = keys.reduce((acc, key) => {
-    const [deleted, added, updated] = acc;
-    if (!oldKeys.includes(key) && newKeys.includes(key)) {
-      const newDeleted = [...deleted, key];
-      return [newDeleted, added, updated];
-    }
-    if (oldKeys.includes(key) && !newKeys.includes(key)) {
-      const newAdded = [...added, key];
-      return [deleted, newAdded, updated];
-    }
-    const newUpdated = [...updated, key];
-    return [deleted, added, newUpdated];
-  }, [[], [], []]);
-
-  const [deleted, added, updated] = dividedKeys;
-
-  const deL = deleted.reduce((acc, key) => {
-    const ast = {
-      key,
-      action: 'removed',
-      ...parse(diff, newFile, key),
-    };
-    return [...acc, ast];
-  }, []);
-
-  const neW = added.reduce((acc, key) => {
-    const ast = {
-      key,
-      action: 'added',
-      ...parse(diff, oldFile, key),
-    };
-    return [...acc, ast];
-  }, []);
-
-  const uP = updated.reduce((acc, key) => {
-    const old = oldFile[key];
-    const $new = newFile[key];
-
-    if (old instanceof Object && $new instanceof Object) {
-      const ast = {
-        key, value: {}, action: 'updated', children: diff(old, $new),
-      };
-      return [...acc, ast];
-    }
-
-    if (old instanceof Object && !($new instanceof Object)) {
-      const ast = {
-        key, value: { $new }, action: 'updated', children: diff(old, old),
-      };
-      return [...acc, ast];
-    }
-
-    if (!(old instanceof Object) && $new instanceof Object) {
-      const ast = {
-        key, value: { old }, action: 'updated', children: diff($new, $new),
-      };
-      return [...acc, ast];
-    }
-
-    if (old === $new) {
-      const ast = {
-        key, value: { old, $new }, action: 'updated', children: [],
-      };
-      return [...acc, ast];
-    }
-    const ast = {
-      key, value: { old, $new }, action: 'updated', children: [],
-    };
-    return [...acc, ast];
-  }, []);
-
-  return [...uP, ...neW, ...deL];
+const whatHappensWithKey = (key, oldKeys, newKeys) => {
+  const hasOldKey = oldKeys.includes(key);
+  const hasNewKey = newKeys.includes(key);
+  if (!hasOldKey && hasNewKey) {
+    return 'removed';
+  }
+  if (hasOldKey && !hasNewKey) {
+    return 'added';
+  }
+  return 'updated';
 };
 
-export default diff;
+const makeDiff = (oldContent, newContent) => {
+  const oldKeys = Object.keys(oldContent);
+  const newKeys = Object.keys(newContent);
+  const keys = _.union(newKeys, oldKeys);
+
+  const tree = keys.reduce((acc, key) => {
+    const action = whatHappensWithKey(key, oldKeys, newKeys);
+    const templateNode = {
+      key, action,
+    };
+    const oldValue = oldContent[key];
+    const newValue = newContent[key];
+
+    if (action === 'removed') {
+      const node = {
+        ...templateNode,
+        ...parse(makeDiff, newValue),
+      };
+      return [...acc, node];
+    }
+
+    if (action === 'added') {
+      const node = {
+        ...templateNode,
+        ...parse(makeDiff, oldValue),
+      };
+      return [...acc, node];
+    }
+
+    const oldValueTypeIsObject = _.isObject(oldValue);
+    const newValueTypeIsObject = _.isObject(newValue);
+
+    if (oldValueTypeIsObject && newValueTypeIsObject) {
+      const node = {
+        ...templateNode, value: {}, children: makeDiff(oldValue, newValue),
+      };
+      return [...acc, node];
+    }
+
+    if (oldValueTypeIsObject && !newValueTypeIsObject) {
+      const node = {
+        ...templateNode, value: { newValue }, children: makeDiff(oldValue, oldValue),
+      };
+      return [...acc, node];
+    }
+
+    if (!oldValueTypeIsObject && newValueTypeIsObject) {
+      const node = {
+        ...templateNode, value: { oldValue }, children: makeDiff(newValue, newValue),
+      };
+      return [...acc, node];
+    }
+
+    const node = {
+      ...templateNode, value: { oldValue, newValue }, children: [],
+    };
+    return [...acc, node];
+  }, []);
+
+  return tree;
+};
+
+export default makeDiff;

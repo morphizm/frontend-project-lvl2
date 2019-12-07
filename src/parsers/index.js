@@ -3,14 +3,14 @@ import path from 'path';
 import ini from 'ini';
 
 const formatToArray = {
-  '.yml': (e) => yaml.safeLoad(e),
-  '.json': (e) => JSON.parse(e),
-  '.ini': (e) => ini.parse(e),
+  '.yml': yaml.safeLoad,
+  '.json': JSON.parse,
+  '.ini': ini.parse,
 };
 
-const parse = (readyFile, pathname) => {
+const parse = (content, pathname) => {
   const extname = path.extname(pathname);
-  return formatToArray[extname](readyFile);
+  return formatToArray[extname](content);
 };
 
 export default parse;

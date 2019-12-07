@@ -9,39 +9,39 @@ const spaces = {
 const forUp = (elem, level) => {
   const { value, key } = elem;
   if (value instanceof Object) {
-    const { old, $new } = value;
-    if (old === $new) {
+    const { oldValue, newValue } = value;
+    if (oldValue === newValue) {
       const space = repeat(level + 2);
-      const str = `${space}${key}: ${old}`;
+      const str = `${space}${key}: ${oldValue}`;
       return str;
     }
     const space = repeat(level);
-    const str = `${space}+ ${key}: ${value.old}\n${space}- ${key}: ${value.$new}`;
+    const str = `${space}+ ${key}: ${value.oldValue}\n${space}- ${key}: ${value.newValue}`;
     return str;
   }
   const space = repeat(level + 2);
-  const str = `${space}${key}: ${value.old}`;
+  const str = `${space}${key}: ${value.oldValue}`;
   return str;
 };
 
 const forChild = (func, elem, level) => {
   const space = repeat(level);
   const { key, value, children } = elem;
-  const { old, $new } = value;
-  if (old && $new) {
-    if (old === $new) {
-      const str = `${space} ${key}: ${old}`;
+  const { oldValue, newValue } = value;
+  if (oldValue && newValue) {
+    if (oldValue === newValue) {
+      const str = `${space} ${key}: ${oldValue}`;
       return str;
     }
-    const str = `${space}+ ${key}: ${old}\n${space}- ${key}: ${$new}`;
+    const str = `${space}+ ${key}: ${oldValue}\n${space}- ${key}: ${newValue}`;
     return str;
   }
-  if (old && !$new) {
-    const str = `${space}+ ${key}: ${old}\n${space}- ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;
+  if (oldValue && !newValue) {
+    const str = `${space}+ ${key}: ${oldValue}\n${space}- ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;
     return str;
   }
-  if (!old && $new) {
-    const str = `${space}- ${key}: ${$new}\n${space}+ ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;
+  if (!oldValue && newValue) {
+    const str = `${space}- ${key}: ${newValue}\n${space}+ ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;
     return str;
   }
   const str = `${space}  ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;

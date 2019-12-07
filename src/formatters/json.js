@@ -1,7 +1,7 @@
 const parseWithKey = (elem) => {
   const { key, value, children } = elem;
   if (children.length === 0) {
-    const res = value.old ? value.old : value;
+    const res = value.oldValue ? value.oldValue : value;
     return { [key]: res };
   }
   return children.map((e) => parseWithKey(e));
@@ -10,7 +10,7 @@ const parseWithKey = (elem) => {
 const parse = (elem) => {
   const { value, children } = elem;
   if (children.length === 0) {
-    const res = value.old ? value.old : value;
+    const res = value.oldValue ? value.oldValue : value;
     return res;
   }
   return children.reduce((acc, e) => ({ ...acc, ...parseWithKey(e) }), {});
@@ -19,7 +19,7 @@ const parse = (elem) => {
 const updatedParse = (elem, func) => {
   const { value, children } = elem;
   if (children.length === 0) {
-    return [value.old, value.$new];
+    return [value.oldValue, value.newValue];
   }
   return [func(children)];
 };
