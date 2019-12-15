@@ -8,47 +8,31 @@ const parse = (element, parents) => {
     return str;
   }
   if (action === 'removed') {
-    const complex = element.value instanceof Object ? complexValue : value;
-    if (typeof value === 'string') {
-      const str = `Property '${parents}${key}' was added with value: '${complex}'`;
-      return str;
-    }
+    const stringValue = typeof value === 'string' ? `'${value}'` : value;
+    const complex = stringValue instanceof Object ? complexValue : stringValue;
     const str = `Property '${parents}${key}' was added with value: ${complex}`;
     return str;
   }
   const { oldValue, newValue } = value;
-  if ((oldValue && oldValue === newValue) || (!oldValue && !newValue)) {
-    return '';
-  }
   const newOld = typeof oldValue === 'string' ? `'${oldValue}'` : oldValue;
   const newNew = typeof newValue === 'string' ? `'${newValue}'` : newValue;
-  const oldComplex = newOld || complexValue;
-  const newComplex = newNew || complexValue;
-  const str = `Property '${parents}${key}' was updated. From ${oldComplex} to ${newComplex}`;
+  const str = `Property '${parents}${key}' was updated. From ${newOld} to ${newNew}`;
   return str;
 };
 
 const render = (data) => {
   const iter = (obj, depth) => {
-    const result = obj.reduce((acc, element) => {
-      if (element.children.length === 0) {
-        const newAcc = parse(element, depth);
-        return [...acc, newAcc];
+    const result = obj.map((element) => {
+      const {
+        key, children,
+      } = element;
+      if (children.length === 0) {
+        return parse(element, depth);
       }
-      if (element.action === 'added') {
-        const newAcc = parse(element, depth);
-        return [...acc, newAcc];
-      }
-      if (element.action === 'removed') {
-        const newAcc = parse(element, depth);
-        return [...acc, newAcc];
-      }
-      const newAcc = iter(element.children, `${depth}${element.key}.`);
-      return [...acc, newAcc];
+      return iter(children, `${depth}${key}.`);
     }, []);
     return result.filter((e) => e.trim()).join('\n');
   };
-
   return iter(data, '');
 };
 

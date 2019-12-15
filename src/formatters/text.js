@@ -56,7 +56,7 @@ const render = (data) => {
       }
 
       const space = spaces[action](level);
-      const str = `${space}${key}: {\n${iter(children, level + 4)}\n${repeat(level + 2)}}`;
+      const str = `${space}${key}: {\n${iter(children, level + 4)}\n${space}}`;
       return str;
     }, []);
 
