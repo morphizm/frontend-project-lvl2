@@ -24,10 +24,12 @@ const forUpdatedAction = (elem, level) => {
   const space = repeat(level);
   const spaceForBracket = repeat(level + 2);
   const spaceForKey = repeat(level + 6);
+
   const newValueStr = newValue instanceof Object
     ? stringify(newValue, spaceForBracket, spaceForKey) : newValue;
   const oldValueStr = oldValue instanceof Object
     ? stringify(oldValue, spaceForBracket, spaceForKey) : oldValue;
+
   const str = `${space}+ ${key}: ${oldValueStr}\n${space}- ${key}: ${newValueStr}`;
   return str;
 };
