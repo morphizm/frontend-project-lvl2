@@ -1,14 +1,14 @@
 const parse = (element, parents) => {
   const complexValue = '[complex value]';
   const {
-    key, value, action, children,
+    key, value, action,
   } = element;
   if (action === 'added') {
     const str = `Property '${parents}${key}' was removed`;
     return str;
   }
   if (action === 'removed') {
-    const complex = children.length > 0 ? complexValue : value;
+    const complex = element.value instanceof Object ? complexValue : value;
     if (typeof value === 'string') {
       const str = `Property '${parents}${key}' was added with value: '${complex}'`;
       return str;

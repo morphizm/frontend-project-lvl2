@@ -6,66 +6,53 @@ const spaces = {
   updated: (e) => `${repeat(e + 2)}`,
 };
 
-const forUp = (elem, level) => {
-  const { value, key } = elem;
-  if (value instanceof Object) {
-    const { oldValue, newValue } = value;
-    if (oldValue === newValue) {
-      const space = repeat(level + 2);
-      const str = `${space}${key}: ${oldValue}`;
-      return str;
-    }
-    const space = repeat(level);
-    const str = `${space}+ ${key}: ${value.oldValue}\n${space}- ${key}: ${value.newValue}`;
-    return str;
-  }
-  const space = repeat(level + 2);
-  const str = `${space}${key}: ${value.oldValue}`;
+const stringify = (object, spaceForBracket, spaceForKey) => {
+  const entries = Object.entries(object);
+  const result = entries.map(([key, value]) => `${spaceForKey}${key}: ${value}`);
+  const str = `{\n${result.join('\n')}\n${spaceForBracket}}`;
   return str;
 };
 
-const forChild = (func, elem, level) => {
+const forUpdatedAction = (elem, level) => {
+  const { value, key } = elem;
+  const { newValue, oldValue } = value;
+  if (oldValue === newValue) {
+    const space = repeat(level + 2);
+    const str = `${space}${key}: ${oldValue}`;
+    return str;
+  }
   const space = repeat(level);
-  const { key, value, children } = elem;
-  const { oldValue, newValue } = value;
-  if (oldValue && newValue) {
-    if (oldValue === newValue) {
-      const str = `${space} ${key}: ${oldValue}`;
-      return str;
-    }
-    const str = `${space}+ ${key}: ${oldValue}\n${space}- ${key}: ${newValue}`;
-    return str;
-  }
-  if (oldValue && !newValue) {
-    const str = `${space}+ ${key}: ${oldValue}\n${space}- ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;
-    return str;
-  }
-  if (!oldValue && newValue) {
-    const str = `${space}- ${key}: ${newValue}\n${space}+ ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;
-    return str;
-  }
-  const str = `${space}  ${key}: {\n${func(children, level + 4)}\n${repeat(level + 2)}}`;
+  const newValueStr = newValue instanceof Object
+    ? stringify(newValue, repeat(level + 2), repeat(level + 6)) : newValue;
+  const oldValueStr = oldValue instanceof Object
+    ? stringify(oldValue, repeat(level + 2), repeat(level + 6)) : oldValue;
+  const str = `${space}+ ${key}: ${oldValueStr}\n${space}- ${key}: ${newValueStr}`;
   return str;
 };
+
 
 const render = (data) => {
   const iter = (obj, level = 2) => {
-    const result = obj.reduce((acc, elem) => {
-      if (elem.children.length === 0) {
-        if (elem.action !== 'updated') {
-          const space = spaces[elem.action](level);
-          const str = `${space}${elem.key}: ${elem.value}`;
+    const result = obj.reduce((acc, element) => {
+      const {
+        value, key, action, children,
+      } = element;
+      if (children.length === 0) {
+        if (action !== 'updated') {
+          const space = spaces[action](level);
+          if (value instanceof Object) {
+            const str = `${space}${key}: ${stringify(value, repeat(level + 2), repeat(level + 6))}`;
+            return [...acc, str];
+          }
+          const str = `${space}${key}: ${value}`;
           return [...acc, str];
         }
-        const str = forUp(elem, level);
+        const str = forUpdatedAction(element, level);
         return [...acc, str];
       }
-      if (elem.action === 'updated') {
-        return [...acc, forChild(iter, elem, level)];
-      }
 
-      const space = spaces[elem.action](level);
-      const str = `${space}${elem.key}: {\n${iter(elem.children, level + 4)}\n${repeat(level + 2)}}`;
+      const space = spaces[action](level);
+      const str = `${space}${key}: {\n${iter(children, level + 4)}\n${repeat(level + 2)}}`;
       return [...acc, str];
     }, []);
 

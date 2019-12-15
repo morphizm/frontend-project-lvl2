@@ -1,21 +1,8 @@
 import _ from 'lodash';
 
-const parse = (func, content) => {
-  if (_.isObject(content)) {
-    return {
-      value: undefined,
-      children: func(content, content),
-    };
-  }
-  return {
-    value: content,
-    children: [],
-  };
-};
-
-const whatHappensWithKey = (key, oldKeys, newKeys) => {
-  const hasOldKey = oldKeys.includes(key);
-  const hasNewKey = newKeys.includes(key);
+const getOperationName = (key, oldContent, newContent) => {
+  const hasOldKey = _.has(oldContent, key);
+  const hasNewKey = _.has(newContent, key);
   if (!hasOldKey && hasNewKey) {
     return 'removed';
   }
@@ -30,8 +17,8 @@ const makeDiff = (oldContent, newContent) => {
   const newKeys = Object.keys(newContent);
   const keys = _.union(newKeys, oldKeys);
 
-  const tree = keys.reduce((acc, key) => {
-    const action = whatHappensWithKey(key, oldKeys, newKeys);
+  const tree = keys.map((key) => {
+    const action = getOperationName(key, oldContent, newContent);
     const templateNode = {
       key, action,
     };
@@ -41,17 +28,19 @@ const makeDiff = (oldContent, newContent) => {
     if (action === 'removed') {
       const node = {
         ...templateNode,
-        ...parse(makeDiff, newValue),
+        value: newValue,
+        children: [],
       };
-      return [...acc, node];
+      return node;
     }
 
     if (action === 'added') {
       const node = {
         ...templateNode,
-        ...parse(makeDiff, oldValue),
+        value: oldValue,
+        children: [],
       };
-      return [...acc, node];
+      return node;
     }
 
     const oldValueTypeIsObject = _.isObject(oldValue);
@@ -61,27 +50,13 @@ const makeDiff = (oldContent, newContent) => {
       const node = {
         ...templateNode, value: {}, children: makeDiff(oldValue, newValue),
       };
-      return [...acc, node];
-    }
-
-    if (oldValueTypeIsObject && !newValueTypeIsObject) {
-      const node = {
-        ...templateNode, value: { newValue }, children: makeDiff(oldValue, oldValue),
-      };
-      return [...acc, node];
-    }
-
-    if (!oldValueTypeIsObject && newValueTypeIsObject) {
-      const node = {
-        ...templateNode, value: { oldValue }, children: makeDiff(newValue, newValue),
-      };
-      return [...acc, node];
+      return node;
     }
 
     const node = {
       ...templateNode, value: { oldValue, newValue }, children: [],
     };
-    return [...acc, node];
+    return node;
   }, []);
 
   return tree;
