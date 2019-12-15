@@ -22,10 +22,12 @@ const forUpdatedAction = (elem, level) => {
     return str;
   }
   const space = repeat(level);
+  const spaceForBracket = repeat(level + 2);
+  const spaceForKey = repeat(level + 6);
   const newValueStr = newValue instanceof Object
-    ? stringify(newValue, repeat(level + 2), repeat(level + 6)) : newValue;
+    ? stringify(newValue, spaceForBracket, spaceForKey) : newValue;
   const oldValueStr = oldValue instanceof Object
-    ? stringify(oldValue, repeat(level + 2), repeat(level + 6)) : oldValue;
+    ? stringify(oldValue, spaceForBracket, spaceForKey) : oldValue;
   const str = `${space}+ ${key}: ${oldValueStr}\n${space}- ${key}: ${newValueStr}`;
   return str;
 };
@@ -33,27 +35,29 @@ const forUpdatedAction = (elem, level) => {
 
 const render = (data) => {
   const iter = (obj, level = 2) => {
-    const result = obj.reduce((acc, element) => {
+    const result = obj.map((element) => {
       const {
         value, key, action, children,
       } = element;
-      if (children.length === 0) {
-        if (action !== 'updated') {
-          const space = spaces[action](level);
-          if (value instanceof Object) {
-            const str = `${space}${key}: ${stringify(value, repeat(level + 2), repeat(level + 6))}`;
-            return [...acc, str];
-          }
-          const str = `${space}${key}: ${value}`;
-          return [...acc, str];
+
+      if (action !== 'updated') {
+        const space = spaces[action](level);
+        if (value instanceof Object) {
+          const str = `${space}${key}: ${stringify(value, repeat(level + 2), repeat(level + 6))}`;
+          return str;
         }
+        const str = `${space}${key}: ${value}`;
+        return str;
+      }
+
+      if (children.length === 0) {
         const str = forUpdatedAction(element, level);
-        return [...acc, str];
+        return str;
       }
 
       const space = spaces[action](level);
       const str = `${space}${key}: {\n${iter(children, level + 4)}\n${repeat(level + 2)}}`;
-      return [...acc, str];
+      return str;
     }, []);
 
     return result.join('\n');
