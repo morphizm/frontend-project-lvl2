@@ -1,5 +1,4 @@
 import yaml from 'js-yaml';
-import path from 'path';
 import ini from 'ini';
 
 const formatToArray = {
@@ -8,9 +7,6 @@ const formatToArray = {
   '.ini': ini.parse,
 };
 
-const parse = (content, pathname) => {
-  const extname = path.extname(pathname);
-  return formatToArray[extname](content);
-};
+const parse = (content, extname) => formatToArray[extname](content);
 
 export default parse;

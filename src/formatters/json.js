@@ -11,12 +11,18 @@ const render = (data) => data.reduce((acc, element) => {
   const {
     action, key, value,
   } = element;
-  if (action !== 'updated') {
-    const newAcc = [action, value];
-    return { ...acc, [key]: newAcc };
+  switch (action) {
+    case 'added':
+      return { ...acc, [key]: [action, value] };
+    case 'removed':
+      return { ...acc, [key]: [action, value] };
+    case 'updated': {
+      const newAcc = [action, ...parseForUpdated(element, render)];
+      return { ...acc, [key]: newAcc };
+    }
+    default:
+      return 'Unknown type';
   }
-  const newAcc = [action, ...parseForUpdated(element, render)];
-  return { ...acc, [key]: newAcc };
 }, {});
 
-export default render;
+export default (data) => JSON.stringify(render(data));

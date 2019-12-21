@@ -3,13 +3,14 @@ import renderJson from './json';
 import render from './text';
 
 const getRender = (format) => {
-  if (format === 'json') {
-    return (data) => JSON.stringify(renderJson(data));
+  switch (format) {
+    case 'json':
+      return renderJson;
+    case 'plain':
+      return renderPlain;
+    default:
+      return render;
   }
-  if (format === 'plain') {
-    return renderPlain;
-  }
-  return render;
 };
 
 export default getRender;

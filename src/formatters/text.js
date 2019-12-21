@@ -49,25 +49,29 @@ const render = (data) => {
       const {
         value, key, action, children,
       } = element;
-
-      if (action !== 'updated') {
-        const space = spaces[action](level);
-        if (value instanceof Object) {
-          const str = `${space}${key}: ${stringify(value, repeat(level + 2), repeat(level + 6))}`;
-          return str;
-        }
-        const str = `${space}${key}: ${value}`;
-        return str;
-      }
-
-      if (children.length === 0) {
-        const str = forUpdatedAction(element, level);
-        return str;
-      }
-
       const space = spaces[action](level);
-      const str = `${space}${key}: {\n${iter(children, level + 4)}\n${space}}`;
-      return str;
+      switch (action) {
+        case 'added':
+          if (value instanceof Object) {
+            const str = `${space}${key}: ${stringify(value, repeat(level + 2), repeat(level + 6))}`;
+            return str;
+          }
+          return `${space}${key}: ${value}`;
+        case 'removed':
+          if (value instanceof Object) {
+            const str = `${space}${key}: ${stringify(value, repeat(level + 2), repeat(level + 6))}`;
+            return str;
+          }
+          return `${space}${key}: ${value}`;
+        case 'updated':
+          if (children.length === 0) {
+            const str = forUpdatedAction(element, level);
+            return str;
+          }
+          return `${space}${key}: {\n${iter(children, level + 4)}\n${space}}`;
+        default:
+          return 'Unknown type';
+      }
     }, []);
 
     return result.join('\n');

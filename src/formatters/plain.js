@@ -3,21 +3,24 @@ const parse = (element, parents) => {
   const {
     key, value, action,
   } = element;
-  if (action === 'added') {
-    const str = `Property '${parents}${key}' was removed`;
-    return str;
+  switch (action) {
+    case 'added':
+      return `Property '${parents}${key}' was removed`;
+    case 'removed': {
+      const stringValue = typeof value === 'string' ? `'${value}'` : value;
+      const complex = stringValue instanceof Object ? complexValue : stringValue;
+      const str = `Property '${parents}${key}' was added with value: ${complex}`;
+      return str;
+    }
+    case 'updated': {
+      const { oldValue, newValue } = value;
+      const newOld = typeof oldValue === 'string' ? `'${oldValue}'` : oldValue;
+      const newNew = typeof newValue === 'string' ? `'${newValue}'` : newValue;
+      return `Property '${parents}${key}' was updated. From ${newOld} to ${newNew}`;
+    }
+    default:
+      return 'Unknown type';
   }
-  if (action === 'removed') {
-    const stringValue = typeof value === 'string' ? `'${value}'` : value;
-    const complex = stringValue instanceof Object ? complexValue : stringValue;
-    const str = `Property '${parents}${key}' was added with value: ${complex}`;
-    return str;
-  }
-  const { oldValue, newValue } = value;
-  const newOld = typeof oldValue === 'string' ? `'${oldValue}'` : oldValue;
-  const newNew = typeof newValue === 'string' ? `'${newValue}'` : newValue;
-  const str = `Property '${parents}${key}' was updated. From ${newOld} to ${newNew}`;
-  return str;
 };
 
 const render = (data) => {

@@ -1,42 +1,30 @@
 import _ from 'lodash';
 
-const getOperationName = (key, oldContent, newContent) => {
-  const hasOldKey = _.has(oldContent, key);
-  const hasNewKey = _.has(newContent, key);
-  if (!hasOldKey && hasNewKey) {
-    return 'removed';
-  }
-  if (hasOldKey && !hasNewKey) {
-    return 'added';
-  }
-  return 'updated';
-};
-
 const makeDiff = (oldContent, newContent) => {
   const oldKeys = Object.keys(oldContent);
   const newKeys = Object.keys(newContent);
   const keys = _.union(newKeys, oldKeys);
 
   const tree = keys.map((key) => {
-    const action = getOperationName(key, oldContent, newContent);
-    const templateNode = {
-      key, action,
-    };
+    const hasOldKey = _.has(oldContent, key);
+    const hasNewKey = _.has(newContent, key);
     const oldValue = oldContent[key];
     const newValue = newContent[key];
 
-    if (action === 'removed') {
+    if (!hasOldKey && hasNewKey) {
       const node = {
-        ...templateNode,
+        key,
+        action: 'removed',
         value: newValue,
         children: [],
       };
       return node;
     }
 
-    if (action === 'added') {
+    if (hasOldKey && !hasNewKey) {
       const node = {
-        ...templateNode,
+        key,
+        action: 'added',
         value: oldValue,
         children: [],
       };
@@ -48,13 +36,13 @@ const makeDiff = (oldContent, newContent) => {
 
     if (oldValueTypeIsObject && newValueTypeIsObject) {
       const node = {
-        ...templateNode, value: {}, children: makeDiff(oldValue, newValue),
+        key, action: 'updated', value: {}, children: makeDiff(oldValue, newValue),
       };
       return node;
     }
 
     const node = {
-      ...templateNode, value: { oldValue, newValue }, children: [],
+      key, action: 'updated', value: { oldValue, newValue }, children: [],
     };
     return node;
   }, []);

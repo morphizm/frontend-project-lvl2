@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import parse from './parsers';
 import makeDiff from './ast';
 import getRender from './formatters';
@@ -6,10 +7,12 @@ import getRender from './formatters';
 
 const genDiff = (pathToFile1, pathToFile2, format) => {
   const oldData = fs.readFileSync(pathToFile1, 'utf-8');
-  const oldContent = parse(oldData, pathToFile1);
+  const oldExtname = path.extname(pathToFile1);
+  const oldContent = parse(oldData, oldExtname);
 
   const newData = fs.readFileSync(pathToFile2, 'utf-8');
-  const newContent = parse(newData, pathToFile2);
+  const newExtname = path.extname(pathToFile2);
+  const newContent = parse(newData, newExtname);
 
   const difference = makeDiff(oldContent, newContent);
   const render = getRender(format);
