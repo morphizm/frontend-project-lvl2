@@ -2,27 +2,40 @@ const parseForUpdated = (elem, func) => {
   const { value, children } = elem;
   const { oldValue, newValue } = value;
   if (children.length === 0) {
-    return [oldValue, newValue];
+    return `["${oldValue}","${newValue}"]`;
   }
   return [func(children)];
 };
 
-const render = (data) => data.reduce((acc, element) => {
-  const {
-    action, key, value,
-  } = element;
-  switch (action) {
-    case 'added':
-      return { ...acc, [key]: [action, value] };
-    case 'removed':
-      return { ...acc, [key]: [action, value] };
-    case 'updated': {
-      const newAcc = [action, ...parseForUpdated(element, render)];
-      return { ...acc, [key]: newAcc };
-    }
-    default:
-      throw new Error('Unknown type');
+const parse = (elem) => {
+  if (!(elem instanceof Object)) {
+    return `${elem}`;
   }
-}, {});
+  const str = Object.entries(elem).map(([key, value]) => `"${key}":"${value}",`);
+  return `{${str.join(' ')}}`;
+};
 
-export default (data) => JSON.stringify(render(data));
+const render = (data) => {
+  const iter = (items) => items.map((element) => {
+    const {
+      action, key, value,
+    } = element;
+    switch (action) {
+      case 'added':
+        return `{"${key}":["${action}","${parse(value)}"]}`;
+      case 'removed':
+        return `{"${key}":["${action}","${parse(value)}"]}`;
+      case 'updated': {
+        const newAcc = `["${action}","${parseForUpdated(element, iter)}"]`;
+        return `{"${key}":"${newAcc}"}`;
+      }
+      default:
+        throw new Error('Unknown type');
+    }
+  });
+  const result = iter(data);
+  return `[${result}]`;
+};
+
+
+export default render;
