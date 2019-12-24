@@ -21,7 +21,7 @@ const render = (data) => data.reduce((acc, element) => {
       return { ...acc, [key]: newAcc };
     }
     default:
-      return 'Unknown type';
+      throw new Error('Unknown type');
   }
 }, {});
 

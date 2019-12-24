@@ -16,7 +16,6 @@ const makeDiff = (oldContent, newContent) => {
         key,
         action: 'removed',
         value: newValue,
-        children: [],
       };
       return node;
     }
@@ -26,7 +25,6 @@ const makeDiff = (oldContent, newContent) => {
         key,
         action: 'added',
         value: oldValue,
-        children: [],
       };
       return node;
     }
