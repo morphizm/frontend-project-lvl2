@@ -49,7 +49,7 @@ const render = (data) => {
   const iter = (obj, level = 2) => {
     const result = obj.map((element) => {
       const {
-        value, key, action, children,
+        value, key, action, children, childrenType,
       } = element;
       const space = spaces[action](level);
       switch (action) {
@@ -58,7 +58,7 @@ const render = (data) => {
         case 'removed':
           return `${space}${key}: ${stringify(value, level)}`;
         case 'updated':
-          if (children.length === 0) {
+          if (childrenType === 'plain') {
             const str = forUpdatedAction(element, level);
             return str;
           }

@@ -19,7 +19,7 @@ const render = (data) => {
   const iter = (obj, depth) => {
     const result = obj.map((element) => {
       const {
-        key, children, action,
+        key, children, action, childrenType,
       } = element;
       switch (action) {
         case 'added':
@@ -27,7 +27,7 @@ const render = (data) => {
         case 'removed':
           return removedParse(element, depth);
         case 'updated': {
-          if (children.length === 0) {
+          if (childrenType === 'plain') {
             return updatedParse(element, depth);
           }
           return iter(children, `${depth}${key}.`);

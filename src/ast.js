@@ -34,13 +34,13 @@ const makeDiff = (oldContent, newContent) => {
 
     if (oldValueTypeIsObject && newValueTypeIsObject) {
       const node = {
-        key, action: 'updated', value: {}, children: makeDiff(oldValue, newValue),
+        key, action: 'updated', value: {}, children: makeDiff(oldValue, newValue), childrenType: 'nested',
       };
       return node;
     }
 
     const node = {
-      key, action: 'updated', value: { oldValue, newValue }, children: [],
+      key, action: 'updated', value: { oldValue, newValue }, children: [], childrenType: 'plain',
     };
     return node;
   }, []);
