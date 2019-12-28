@@ -28,23 +28,14 @@ describe('FORMATS', () => {
     },
   );
 
-  test('nested json', () => {
-    const nestedAfterJson = `${path}/nestedAfter.json`;
-    const nestedBeforeJson = `${path}/nestedBefore.json`;
-    expect(genDiff(nestedAfterJson, nestedBeforeJson)).toEqual(diffBigBtoA);
-  });
-
-  test('nested yaml', () => {
-    const nestedAfterYAML = `${path}/nestedAfter.yml`;
-    const nestedBeforeYAML = `${path}/nestedBefore.yml`;
-    expect(genDiff(nestedAfterYAML, nestedBeforeYAML)).toEqual(diffBigBtoA);
-  });
-
-  test('nested ini', () => {
-    const nestedBeforeINI = `${path}/nestedBefore.ini`;
-    const nestedAfterINI = `${path}/nestedAfter.ini`;
-    expect(genDiff(nestedAfterINI, nestedBeforeINI)).toEqual(diffBigBtoA);
-  });
+  test.each([['json'], ['yml'], ['ini']])(
+    'nested %s',
+    (type) => {
+      const after = `${path}/nestedAfter.${type}`;
+      const before = `${path}/nestedBefore.${type}`;
+      expect(genDiff(after, before)).toEqual(diffBigBtoA);
+    },
+  );
 
   test('plain', () => {
     const plainFormat = fs.readFileSync(`${path}/resultPlain.txt`, 'utf-8');

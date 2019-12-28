@@ -14,7 +14,7 @@ const makeDiff = (oldContent, newContent) => {
     if (!hasOldKey && hasNewKey) {
       const node = {
         key,
-        action: 'removed',
+        nodeType: 'removed',
         value: newValue,
       };
       return node;
@@ -23,7 +23,7 @@ const makeDiff = (oldContent, newContent) => {
     if (hasOldKey && !hasNewKey) {
       const node = {
         key,
-        action: 'added',
+        nodeType: 'added',
         value: oldValue,
       };
       return node;
@@ -34,13 +34,13 @@ const makeDiff = (oldContent, newContent) => {
 
     if (oldValueTypeIsObject && newValueTypeIsObject) {
       const node = {
-        key, action: 'updated', value: {}, children: makeDiff(oldValue, newValue), childrenType: 'nested',
+        key, nodeType: 'updated', children: makeDiff(oldValue, newValue),
       };
       return node;
     }
 
     const node = {
-      key, action: 'updated', value: { oldValue, newValue }, children: [], childrenType: 'plain',
+      key, nodeType: 'updated', oldValue, newValue,
     };
     return node;
   }, []);

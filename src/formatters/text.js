@@ -27,9 +27,14 @@ const stringify = (data, level) => {
   return str;
 };
 
-const forUpdatedAction = (elem, level) => {
-  const { value, key } = elem;
-  const { newValue, oldValue } = value;
+const stringifyUpdated = (elem, level, func) => {
+  const {
+    key, newValue, oldValue, children,
+  } = elem;
+  if (children) {
+    const space = repeat(level + 2);
+    return `${space}${key}: {\n${func(children, level + 4)}\n${space}}`;
+  }
   if (oldValue === newValue) {
     const space = repeat(level + 2);
     const str = `${space}${key}: ${oldValue}`;
@@ -48,23 +53,17 @@ const forUpdatedAction = (elem, level) => {
 const render = (data) => {
   const iter = (obj, level = 2) => {
     const result = obj.map((element) => {
-      const {
-        value, key, action, children, childrenType,
-      } = element;
-      const space = spaces[action](level);
-      switch (action) {
+      const { value, key, nodeType } = element;
+      const space = spaces[nodeType](level);
+      switch (nodeType) {
         case 'added':
           return `${space}${key}: ${stringify(value, level)}`;
         case 'removed':
           return `${space}${key}: ${stringify(value, level)}`;
         case 'updated':
-          if (childrenType === 'plain') {
-            const str = forUpdatedAction(element, level);
-            return str;
-          }
-          return `${space}${key}: {\n${iter(children, level + 4)}\n${space}}`;
+          return stringifyUpdated(element, level, iter);
         default:
-          throw new Error('Unknown type');
+          throw new Error(`Unknown node type: ${nodeType}`);
       }
     }, []);
 

@@ -1,40 +1,33 @@
 const parseForUpdated = (elem, func) => {
-  const { value, children } = elem;
-  const { oldValue, newValue } = value;
-  if (children.length === 0) {
-    return `["${oldValue}","${newValue}"]`;
+  const {
+    children, oldValue, newValue,
+  } = elem;
+  if (!children) {
+    return [oldValue, newValue];
   }
   return [func(children)];
-};
-
-const parse = (elem) => {
-  if (!(elem instanceof Object)) {
-    return `${elem}`;
-  }
-  const str = Object.entries(elem).map(([key, value]) => `"${key}":"${value}",`);
-  return `{${str.join(' ')}}`;
 };
 
 const render = (data) => {
   const iter = (items) => items.map((element) => {
     const {
-      action, key, value,
+      nodeType, key, value,
     } = element;
-    switch (action) {
+    switch (nodeType) {
       case 'added':
-        return `{"${key}":["${action}","${parse(value)}"]}`;
+        return ({ [key]: [nodeType, value] });
       case 'removed':
-        return `{"${key}":["${action}","${parse(value)}"]}`;
+        return ({ [key]: [nodeType, value] });
       case 'updated': {
-        const newAcc = `["${action}","${parseForUpdated(element, iter)}"]`;
-        return `{"${key}":"${newAcc}"}`;
+        const newAcc = ([nodeType, parseForUpdated(element, iter)]);
+        return ({ [key]: newAcc });
       }
       default:
-        throw new Error('Unknown type');
+        throw new Error(`Unknown node type: ${nodeType}`);
     }
   });
   const result = iter(data);
-  return `[${result}]`;
+  return JSON.stringify(result);
 };
 
 
