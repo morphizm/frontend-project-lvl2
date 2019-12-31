@@ -27,7 +27,7 @@ const render = (data) => {
     }
   });
   const result = iter(data);
-  return JSON.stringify(result);
+  return result;
 };
 
 
