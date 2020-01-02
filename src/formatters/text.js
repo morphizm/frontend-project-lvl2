@@ -12,6 +12,8 @@ const spaces = {
   added: (e) => `${repeat(e)}+ `,
   removed: (e) => `${repeat(e)}- `,
   updated: (e) => `${repeat(e + 2)}`,
+  identical: (e) => `${repeat(e + 2)}`,
+  changed: (e) => `${repeat(e)}`,
 };
 
 const stringify = (data, level) => {
@@ -29,26 +31,17 @@ const stringify = (data, level) => {
 
 const stringifyUpdated = (elem, level, func) => {
   const {
-    key, newValue, oldValue, children,
+    key, children,
   } = elem;
-  if (children) {
-    const space = repeat(level + 2);
-    return `${space}${key}: {\n${func(children, level + 4)}\n${space}}`;
-  }
-  if (oldValue === newValue) {
-    const space = repeat(level + 2);
-    const str = `${space}${key}: ${oldValue}`;
-    return str;
-  }
-  const space = repeat(level);
-
-  const newValueStr = stringify(newValue, level);
-  const oldValueStr = stringify(oldValue, level);
-
-  const str = `${space}+ ${key}: ${oldValueStr}\n${space}- ${key}: ${newValueStr}`;
-  return str;
+  const space = repeat(level + 2);
+  return `${space}${key}: {\n${func(children, level + 4)}\n${space}}`;
 };
 
+const stringifyChanged = (elem, level) => {
+  const { key, oldValue, newValue } = elem;
+  const space = spaces.changed(level);
+  return `${space}+ ${key}: ${stringify(oldValue, level)}\n${space}- ${key}: ${stringify(newValue, level)}`;
+};
 
 const render = (data) => {
   const iter = (obj, level = 2) => {
@@ -62,6 +55,10 @@ const render = (data) => {
           return `${space}${key}: ${stringify(value, level)}`;
         case 'updated':
           return stringifyUpdated(element, level, iter);
+        case 'identical':
+          return `${space}${key}: ${stringify(value, level)}`;
+        case 'changed':
+          return stringifyChanged(element, level);
         default:
           throw new Error(`Unknown node type: ${nodeType}`);
       }

@@ -32,6 +32,11 @@ const render = (data) => {
         case 'updated': {
           return updatedParse(element, depth, iter);
         }
+        case 'changed': {
+          return updatedParse(element, depth, iter);
+        }
+        case 'identical':
+          return '';
         default:
           throw new Error(`Unknown node type: ${nodeType}`);
       }

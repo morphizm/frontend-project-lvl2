@@ -22,6 +22,12 @@ const render = (data) => {
         const newAcc = ([nodeType, parseForUpdated(element, iter)]);
         return ({ [key]: newAcc });
       }
+      case 'changed': {
+        const newAcc = ([nodeType, parseForUpdated(element, iter)]);
+        return ({ [key]: newAcc });
+      }
+      case 'identical':
+        return ({ [key]: [nodeType, value] });
       default:
         throw new Error(`Unknown node type: ${nodeType}`);
     }

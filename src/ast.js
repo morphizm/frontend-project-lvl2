@@ -39,8 +39,15 @@ const makeDiff = (oldContent, newContent) => {
       return node;
     }
 
+    if (oldValue === newValue) {
+      const node = {
+        key, nodeType: 'identical', value: oldValue,
+      };
+      return node;
+    }
+
     const node = {
-      key, nodeType: 'updated', oldValue, newValue,
+      key, nodeType: 'changed', oldValue, newValue,
     };
     return node;
   }, []);
