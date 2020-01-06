@@ -29,7 +29,7 @@ const stringifyUpdated = (elem, level, func) => {
   return `${space}${key}: {\n${func(children, level + 4)}\n${space}}`;
 };
 
-const stringifyChanged = (elem, level) => {
+const stringifyNested = (elem, level) => {
   const { key, oldValue, newValue } = elem;
   const space = repeat(level + 2);
   return `${space}+ ${key}: ${stringify(oldValue, level)}\n${space}- ${key}: ${stringify(newValue, level)}`;
@@ -39,18 +39,18 @@ const render = (data) => {
   const iter = (obj, level = 0) => {
     const result = obj.map((element) => {
       const { value, key, nodeType } = element;
-      const space = repeat(level + 2);
+      const space = repeat(level);
       switch (nodeType) {
         case 'added':
-          return `${space}+ ${key}: ${stringify(value, level)}`;
+          return `  ${space}+ ${key}: ${stringify(value, level)}`;
         case 'removed':
-          return `${space}- ${key}: ${stringify(value, level)}`;
+          return `  ${space}- ${key}: ${stringify(value, level)}`;
         case 'updated':
           return stringifyUpdated(element, level, iter);
         case 'identical':
-          return `${space}  ${key}: ${stringify(value, level)}`;
+          return `  ${space}  ${key}: ${stringify(value, level)}`;
         case 'nested':
-          return stringifyChanged(element, level);
+          return stringifyNested(element, level);
         default:
           throw new Error(`Unknown node type: ${nodeType}`);
       }
