@@ -1,23 +1,30 @@
-const addedParse = ({ key }, parents) => `Property '${parents}${key}' was removed`;
+const removedText = (property) => `Property '${property}' was removed`;
+const addedText = (property, value) => `Property '${property}' was added with value: ${value}`;
+const nestedText = (property, oldValue, newValue) => `Property '${property}' was updated. From ${oldValue} to ${newValue}`;
 
-const removedParse = ({ key, value }, parents) => {
+const addedParse = ({ key, value }, parents) => {
   const complexValue = '[complex value]';
   const stringValue = typeof value === 'string' ? `'${value}'` : value;
   const complex = stringValue instanceof Object ? complexValue : stringValue;
-  const str = `Property '${parents}${key}' was added with value: ${complex}`;
-  return str;
+  return addedText(`${parents}${key}`, complex);
 };
+
+const removedParse = ({ key }, parents) => removedText(`${parents}${key}`);
 
 const updatedParse = (element, parents, func) => {
   const {
-    key, oldValue, newValue, children,
+    key, children,
   } = element;
-  if (children) {
-    return func(children, `${parents}${key}.`);
-  }
+  return func(children, `${parents}${key}.`);
+};
+
+const nestedParse = (element, parents) => {
+  const {
+    key, oldValue, newValue,
+  } = element;
   const newOld = typeof oldValue === 'string' ? `'${oldValue}'` : oldValue;
   const newNew = typeof newValue === 'string' ? `'${newValue}'` : newValue;
-  return `Property '${parents}${key}' was updated. From ${newOld} to ${newNew}`;
+  return nestedText(`${parents}${key}`, newOld, newNew);
 };
 
 const render = (data) => {
@@ -32,16 +39,16 @@ const render = (data) => {
         case 'updated': {
           return updatedParse(element, depth, iter);
         }
-        case 'changed': {
-          return updatedParse(element, depth, iter);
+        case 'nested': {
+          return nestedParse(element, depth);
         }
         case 'identical':
-          return '';
+          return null;
         default:
           throw new Error(`Unknown node type: ${nodeType}`);
       }
     }, []);
-    return result.filter((e) => e.trim()).join('\n');
+    return result.join('\n');
   };
   return iter(data, '');
 };

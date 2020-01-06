@@ -1,22 +1,23 @@
 import fs from 'fs';
+import path from 'path';
 import genDiff from '../src';
 
-const path = `${__dirname}/__fixtures__`;
+const getFixuturePath = (name) => path.join(__dirname, '__fixtures__', name);
 
-const afterJson = `${path}/after.json`;
-const beforeJson = `${path}/before.json`;
-const afterYaml = `${path}/after.yml`;
-const beforeYaml = `${path}/before.yml`;
-const afterIni = `${path}/after.ini`;
-const beforeIni = `${path}/before.ini`;
+const afterJson = getFixuturePath('after.json');
+const beforeJson = getFixuturePath('before.json');
+const afterYaml = getFixuturePath('after.yml');
+const beforeYaml = getFixuturePath('before.yml');
+const afterIni = getFixuturePath('after.ini');
+const beforeIni = getFixuturePath('before.ini');
 
-const plainBefore = `${path}/beforePlain.json`;
-const plainAfter = `${path}/afterPlain.json`;
+const plainBefore = getFixuturePath('beforePlain.json');
+const plainAfter = getFixuturePath('afterPlain.json');
 
 describe('FORMATS', () => {
-  const diffAtoB = fs.readFileSync(`${path}/resultAB.txt`, 'utf-8');
-  const diffBtoA = fs.readFileSync(`${path}/resultBA.txt`, 'utf-8');
-  const diffBigBtoA = fs.readFileSync(`${path}/resultNested.txt`, 'utf-8');
+  const diffAtoB = fs.readFileSync(getFixuturePath('resultAB.txt'), 'utf-8');
+  const diffBtoA = fs.readFileSync(getFixuturePath('resultBA.txt'), 'utf-8');
+  const diffBigBtoA = fs.readFileSync(getFixuturePath('resultNested.txt'), 'utf-8');
 
   test.each([[afterJson, beforeJson],
     [afterIni, beforeIni],
@@ -31,19 +32,19 @@ describe('FORMATS', () => {
   test.each([['json'], ['yml'], ['ini']])(
     'nested %s',
     (type) => {
-      const after = `${path}/nestedAfter.${type}`;
-      const before = `${path}/nestedBefore.${type}`;
+      const after = getFixuturePath(`nestedAfter.${type}`);
+      const before = getFixuturePath(`nestedBefore.${type}`);
       expect(genDiff(after, before)).toEqual(diffBigBtoA);
     },
   );
 
   test('plain', () => {
-    const plainFormat = fs.readFileSync(`${path}/resultPlain.txt`, 'utf-8');
-    expect(genDiff(plainBefore, plainAfter, 'plain')).toEqual(plainFormat);
+    const plainFormat = fs.readFileSync(getFixuturePath('resultPlain.txt'), 'utf-8');
+    expect(genDiff(plainAfter, plainBefore, 'plain')).toEqual(plainFormat);
   });
 
   test('json', () => {
-    const json = fs.readFileSync(`${path}/resultJson.txt`, 'utf-8');
+    const json = fs.readFileSync(getFixuturePath('resultJson.txt'), 'utf-8');
     expect(genDiff(plainAfter, plainBefore, 'json')).toEqual(JSON.parse(json));
   });
 });

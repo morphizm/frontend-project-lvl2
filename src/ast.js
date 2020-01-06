@@ -47,7 +47,7 @@ const makeDiff = (oldContent, newContent) => {
     }
 
     const node = {
-      key, nodeType: 'changed', oldValue, newValue,
+      key, nodeType: 'nested', oldValue, newValue,
     };
     return node;
   }, []);
