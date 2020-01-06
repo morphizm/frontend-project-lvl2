@@ -40,7 +40,7 @@ describe('FORMATS', () => {
 
   test('plain', () => {
     const plainFormat = fs.readFileSync(getFixuturePath('resultPlain.txt'), 'utf-8');
-    expect(genDiff(plainAfter, plainBefore, 'plain')).toEqual(plainFormat);
+    expect(genDiff(plainBefore, plainAfter, 'plain')).toEqual(plainFormat);
   });
 
   test('json', () => {

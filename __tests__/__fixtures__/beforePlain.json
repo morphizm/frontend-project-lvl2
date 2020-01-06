@@ -1,19 +1,21 @@
 {
-  "timeout": 50,
-  "proxy": "89.0",
+  "timeout": 20,
   
   "common": {
-    "setting4": "text",
-    "setting5": false,
+    "setting2": 200,
     "setting6": {
-    }
+      "ops": "vops"
+    },
+    "sites": "hexlet.io"
   },
 
   "group1": {
-    "baz": "bars"
+    "baz": "bas"
   },
 
-  "group3": {
+  "verbose": true,
+
+  "group2": {
     "fee": "100500"
   }
 }
