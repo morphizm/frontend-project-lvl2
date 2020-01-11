@@ -33,23 +33,20 @@ const makeDiff = (oldContent, newContent) => {
     const newValueTypeIsObject = _.isObject(newValue);
 
     if (oldValueTypeIsObject && newValueTypeIsObject) {
-      const node = {
-        key, nodeType: 'updated', children: makeDiff(oldValue, newValue),
+      return {
+        key, nodeType: 'nested', children: makeDiff(oldValue, newValue),
       };
-      return node;
     }
 
     if (oldValue === newValue) {
-      const node = {
+      return {
         key, nodeType: 'identical', value: oldValue,
       };
-      return node;
     }
 
-    const node = {
-      key, nodeType: 'nested', oldValue, newValue,
+    return {
+      key, nodeType: 'changed', oldValue, newValue,
     };
-    return node;
   }, []);
 
   return tree;
