@@ -45,6 +45,6 @@ describe('FORMATS', () => {
 
   test('json', () => {
     const json = fs.readFileSync(getFixuturePath('resultJson.txt'), 'utf-8');
-    expect(genDiff(plainAfter, plainBefore, 'json')).toEqual(JSON.parse(json));
+    expect(JSON.parse(genDiff(plainAfter, plainBefore, 'json'))).toEqual(JSON.parse(json));
   });
 });

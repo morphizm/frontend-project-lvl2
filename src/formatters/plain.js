@@ -2,6 +2,13 @@ const removedText = (property) => `Property '${property}' was removed`;
 const addedText = (property, value) => `Property '${property}' was added with value: ${value}`;
 const changedText = (property, oldValue, newValue) => `Property '${property}' was updated. From ${oldValue} to ${newValue}`;
 
+const stringify = (value) => {
+  if (value instanceof Object) {
+    return '[complex value]';
+  }
+  return typeof value === 'string' ? `'${value}'` : value;
+};
+
 const render = (data) => {
   const iter = (obj, depth) => {
     const result = obj.map((element) => {
@@ -10,10 +17,8 @@ const render = (data) => {
       } = element;
       switch (nodeType) {
         case 'added': {
-          const complexValue = '[complex value]';
-          const stringValue = typeof value === 'string' ? `'${value}'` : value;
-          const complex = stringValue instanceof Object ? complexValue : stringValue;
-          return addedText(`${depth}${key}`, complex);
+          const stringValue = stringify(value);
+          return addedText(`${depth}${key}`, stringValue);
         }
         case 'removed':
           return removedText(`${depth}${key}`);
@@ -21,8 +26,8 @@ const render = (data) => {
           return iter(children, `${depth}${key}.`);
         }
         case 'changed': {
-          const stringOldValue = typeof oldValue === 'string' ? `'${oldValue}'` : oldValue;
-          const stringNewValue = typeof newValue === 'string' ? `'${newValue}'` : newValue;
+          const stringOldValue = stringify(oldValue);
+          const stringNewValue = stringify(newValue);
           return changedText(`${depth}${key}`, stringOldValue, stringNewValue);
         }
         case 'identical':
